@@ -22,14 +22,15 @@ public class MemberService {
     public MemberResponseDto createMember(MemberDto memberDto) {
         verifyNewEmail(memberDto.getEmail());
         //password encrypt
-        Member member = Member.from(memberDto.getEmail(), memberDto.getPassword());
+        String encodedPassword = passwordEncoder.encode(memberDto.getPassword());
+        Member member = Member.from(memberDto.getEmail(), encodedPassword);
         member = memberRepository.save(member);
         return MemberResponseDto.fromMember(member);
     }
 
     public String login(LoginDto loginDto) {
         Member member = getExistingMember(loginDto.getEmail());
-        if (!member.checkPassword(loginDto.getPassword())) {
+        if (!member.correctPassword(passwordEncoder, loginDto.getPassword())) {
             throw new RuntimeException("password doesn't match");
         }
         // generate jwt token
