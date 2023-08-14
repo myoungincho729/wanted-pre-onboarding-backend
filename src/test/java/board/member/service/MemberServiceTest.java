@@ -60,8 +60,8 @@ class MemberServiceTest {
         }).isInstanceOf(RuntimeException.class);
     }
 
-    @DisplayName("로그인 테스트(jwt 적용 전) - 정상동작")
-    @Test
+//    @DisplayName("로그인 테스트(jwt 적용 전) - 정상동작")
+//    @Test
     void loginTest1() {
         //given
         String email = "myoungin@gmail.com";
@@ -72,7 +72,7 @@ class MemberServiceTest {
 
         //when
         MemberResponseDto memberResponseDto = memberService.createMember(memberDto);
-        String token = memberService.login(loginDto);
+        String token = memberService.login(loginDto).getToken();
 
         //then
         assertEquals(token, "token");
@@ -95,6 +95,24 @@ class MemberServiceTest {
         Assertions.assertThatThrownBy(
                 () -> memberService.login(loginDto)
         ).isInstanceOf(RuntimeException.class);
+    }
+
+    @DisplayName("로그인 테스트(jwt 적용) - 정상동작")
+    @Test
+    void loginTest3() {
+        //given
+        String email = "myoungin@gmail.com";
+        String password = "qwer1234";
+        MemberDto memberDto = new MemberDto(email, password);
+
+        LoginDto loginDto = new LoginDto(email, "qwer1234");
+
+        //when
+        MemberResponseDto memberResponseDto = memberService.createMember(memberDto);
+
+        //then
+        String token = memberService.login(loginDto).getToken();
+        System.out.println(token);
     }
 
 }
