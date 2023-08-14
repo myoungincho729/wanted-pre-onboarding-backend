@@ -7,8 +7,8 @@ import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-@Getter
 @Entity
 @NoArgsConstructor
 public class Member {
@@ -32,7 +32,7 @@ public class Member {
                 .build();
     }
 
-    public boolean checkPassword(String password) {
-        return this.password.equals(password);
+    public boolean correctPassword(PasswordEncoder passwordEncoder, String password) {
+        return passwordEncoder.matches(password, this.password);
     }
 }
