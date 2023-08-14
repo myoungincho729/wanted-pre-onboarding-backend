@@ -2,7 +2,9 @@ package board.member.dto;
 
 import board.member.entity.Member;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class MemberResponseDto {
     private String email;
 
