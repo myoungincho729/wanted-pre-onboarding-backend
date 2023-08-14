@@ -1,6 +1,8 @@
 package board.member.service;
 
+import board.jwt.JwtUtils;
 import board.member.dto.LoginDto;
+import board.member.dto.LoginResponseDto;
 import board.member.dto.MemberDto;
 import board.member.dto.MemberResponseDto;
 import board.member.entity.Member;
@@ -18,6 +20,7 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtils jwtUtils;
 
     public MemberResponseDto createMember(MemberDto memberDto) {
         verifyNewEmail(memberDto.getEmail());
@@ -28,13 +31,14 @@ public class MemberService {
         return MemberResponseDto.fromMember(member);
     }
 
-    public String login(LoginDto loginDto) {
+    public LoginResponseDto login(LoginDto loginDto) {
         Member member = getExistingMember(loginDto.getEmail());
         if (!member.correctPassword(passwordEncoder, loginDto.getPassword())) {
             throw new RuntimeException("password doesn't match");
         }
         // generate jwt token
-        return "token";
+        String token = jwtUtils.createToken(member.getEmail());
+        return LoginResponseDto.from("Bearer " + token);
     }
 
     private Member getExistingMember(String email) {
