@@ -9,13 +9,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MemberDto {
+public class MemberPostDto {
     @EmailConstraint
     private String email;
     @PasswordConstraint
     private String password;
 
-    public MemberDto(String email, String password) {
+    public MemberPostDto(String email, String password) {
         this.email = email;
         this.password = password;
     }
