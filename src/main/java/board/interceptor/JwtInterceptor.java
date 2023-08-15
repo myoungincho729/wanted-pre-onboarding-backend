@@ -29,6 +29,8 @@ public class JwtInterceptor implements HandlerInterceptor {
                 throw new BusinessException(ExceptionCode.LOGIN_NEEDED);
             }
             threadLocal.set(email);
+        } catch (ExpiredJwtException e) {
+            throw e;
         } catch (JwtException e) {
             throw e;
         }
