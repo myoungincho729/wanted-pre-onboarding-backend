@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -13,12 +14,12 @@ import java.time.Duration;
 import java.util.Date;
 
 @Component
+@Slf4j
 public class JwtUtils {
-    @Value("${jwt.secret-key}")
-    private String SECRET_KEY;
-
-    @Value("${jwt.duration-minute}")
-    private Integer DURATION_MINUTES;
+    @Value("${jwt.secret}")
+    private String secret;
+    @Value("${jwt.duration}")
+    private long duration;
 
     public String encodeBase64SecretKey(String secretKey) {
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));
@@ -27,16 +28,16 @@ public class JwtUtils {
         Date now = new Date();
 
         return Jwts.builder()
-                .setHeaderParam(Header.TYPE, Header.JWT_TYPE) // (1)
-                .setIssuedAt(now) // (3)
-                .setExpiration(new Date(now.getTime() + Duration.ofMinutes(DURATION_MINUTES).toMillis())) // (4)
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + Duration.ofMinutes(duration).toMillis()))
                 .claim("email", email)
-                .signWith(SignatureAlgorithm.HS256, encodeBase64SecretKey(SECRET_KEY)) // (6)
+                .signWith(SignatureAlgorithm.HS256, encodeBase64SecretKey(secret))
                 .compact();
     }
 
     public String getEmailFromToken(String token) {
-        Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(SECRET_KEY));
+        Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(secret));
 
         Jws<Claims> claims = Jwts.parserBuilder()
                 .setSigningKey(key)
