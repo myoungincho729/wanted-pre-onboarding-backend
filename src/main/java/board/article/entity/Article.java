@@ -52,6 +52,6 @@ public class Article {
         if (content == null || content.isEmpty()) {
             return;
         }
-        this.content = title;
+        this.content = content;
     }
 }
