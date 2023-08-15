@@ -1,6 +1,8 @@
 package board.advice;
 
+import board.exception.BusinessException;
 import board.response.Response;
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -25,6 +27,22 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity validationFail(RuntimeException e) {
+        Response response = Response.builder()
+                .error(e.getMessage())
+                .build();
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity jwtException(JwtException e) {
+        Response response = Response.builder()
+                .error(e.getMessage())
+                .build();
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity bussinessException(BusinessException e) {
         Response response = Response.builder()
                 .error(e.getMessage())
                 .build();
