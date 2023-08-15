@@ -22,7 +22,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
 
-    public MemberResponseDto createMember(MemberDto memberDto) {
+    public MemberResponseDto createMember(MemberPostDto memberDto) {
         verifyNewEmail(memberDto.getEmail());
         //password encrypt
         String encodedPassword = passwordEncoder.encode(memberDto.getPassword());
