@@ -36,6 +36,18 @@ public class JwtUtils {
                 .compact();
     }
 
+    public String createExpiredToken(String email) {
+        Date now = new Date();
+
+        return Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() - Duration.ofMinutes(duration).toMillis()))
+                .claim("email", email)
+                .signWith(SignatureAlgorithm.HS256, encodeBase64SecretKey(secret))
+                .compact();
+    }
+
     public String getEmailFromToken(String token) {
         Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(secret));
 
