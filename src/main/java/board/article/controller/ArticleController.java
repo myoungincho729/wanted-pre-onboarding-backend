@@ -6,6 +6,7 @@ import board.article.dto.ArticleUpdateDto;
 import board.article.dto.PageResponseDto;
 import board.article.service.ArticleService;
 import board.interceptor.JwtInterceptor;
+import board.response.Response;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,11 @@ public class ArticleController {
     @PostMapping("/create")
     public ResponseEntity createArticle(@RequestBody @Valid ArticlePostDto articleDto) {
         ArticleResponseDto responseDto = articleService.createArticle(JwtInterceptor.threadLocal.get(), articleDto);
-        return ResponseEntity.ok().body(responseDto);
+        return ResponseEntity.ok().body(
+                Response.builder()
+                .data(responseDto)
+                .build()
+        );
     }
 
     @PatchMapping("/update/{articleId}")
@@ -28,7 +33,11 @@ public class ArticleController {
             @PathVariable Long articleId,
             @RequestBody @Valid ArticleUpdateDto updateDto) {
         ArticleResponseDto responseDto = articleService.updateArticle(articleId, updateDto, JwtInterceptor.threadLocal.get());
-        return ResponseEntity.ok().body(responseDto);
+        return ResponseEntity.ok().body(
+                Response.builder()
+                        .data(responseDto)
+                        .build()
+        );
     }
 
     @DeleteMapping("/delete/{articleId}")
@@ -43,12 +52,20 @@ public class ArticleController {
            @RequestParam(defaultValue = "5") int size
     ) {
         PageResponseDto pageResponseDto = articleService.getArticles(page, size);
-        return ResponseEntity.ok().body(pageResponseDto);
+        return ResponseEntity.ok().body(
+                Response.builder()
+                        .data(pageResponseDto)
+                        .build()
+        );
     }
 
     @GetMapping("/{articleId}")
     public ResponseEntity articleDetails(@PathVariable Long articleId) {
         ArticleResponseDto responseDto = articleService.getArticle(articleId);
-        return ResponseEntity.ok().body(responseDto);
+        return ResponseEntity.ok().body(
+                Response.builder()
+                        .data(responseDto)
+                        .build()
+        );
     }
 }
