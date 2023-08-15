@@ -2,6 +2,7 @@ package board.advice;
 
 import board.exception.BusinessException;
 import board.response.Response;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -33,10 +34,17 @@ public class GlobalControllerAdvice {
         return ResponseEntity.badRequest().body(response);
     }
 
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity jwtException(ExpiredJwtException e) {
+        Response response = Response.builder()
+                .error("Token expired. Please login again.")
+                .build();
+        return ResponseEntity.badRequest().body(response);
+    }
     @ExceptionHandler(JwtException.class)
     public ResponseEntity jwtException(JwtException e) {
         Response response = Response.builder()
-                .error(e.getMessage())
+                .error("Token invalid")
                 .build();
         return ResponseEntity.badRequest().body(response);
     }
