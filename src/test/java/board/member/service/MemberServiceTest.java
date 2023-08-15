@@ -1,9 +1,8 @@
 package board.member.service;
 
 import board.member.dto.LoginDto;
-import board.member.dto.MemberDto;
+import board.member.dto.MemberPostDto;
 import board.member.dto.MemberResponseDto;
-import board.member.entity.Member;
 import board.member.repository.MemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +29,7 @@ class MemberServiceTest {
         //given
         String email = "myoungin@gmail.com";
         String password = "qwer1234";
-        MemberDto memberDto = new MemberDto(email, password);
+        MemberPostDto memberDto = new MemberPostDto(email, password);
 
         //when
         MemberResponseDto memberResponseDto = memberService.createMember(memberDto);
@@ -45,11 +44,11 @@ class MemberServiceTest {
         //given
         String email = "myoungin@gmail.com";
         String password = "qwer1234";
-        MemberDto memberDto = new MemberDto(email, password);
+        MemberPostDto memberDto = new MemberPostDto(email, password);
 
         String email2 = "myoungin@gmail.com";
         String password2 = "1234qwer";
-        MemberDto memberDto2 = new MemberDto(email2, password2);
+        MemberPostDto memberDto2 = new MemberPostDto(email2, password2);
 
         //when
         MemberResponseDto memberResponseDto = memberService.createMember(memberDto);
@@ -66,7 +65,7 @@ class MemberServiceTest {
         //given
         String email = "myoungin@gmail.com";
         String password = "qwer1234";
-        MemberDto memberDto = new MemberDto(email, password);
+        MemberPostDto memberDto = new MemberPostDto(email, password);
 
         LoginDto loginDto = new LoginDto(email, password);
 
@@ -84,7 +83,7 @@ class MemberServiceTest {
         //given
         String email = "myoungin@gmail.com";
         String password = "qwer1234";
-        MemberDto memberDto = new MemberDto(email, password);
+        MemberPostDto memberDto = new MemberPostDto(email, password);
 
         LoginDto loginDto = new LoginDto(email, "1234qwer");
 
@@ -103,7 +102,7 @@ class MemberServiceTest {
         //given
         String email = "myoungin@gmail.com";
         String password = "qwer1234";
-        MemberDto memberDto = new MemberDto(email, password);
+        MemberPostDto memberDto = new MemberPostDto(email, password);
 
         LoginDto loginDto = new LoginDto(email, "qwer1234");
 
