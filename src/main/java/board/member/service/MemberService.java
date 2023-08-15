@@ -1,9 +1,11 @@
 package board.member.service;
 
+import board.exception.BusinessException;
+import board.exception.ExceptionCode;
 import board.jwt.JwtUtils;
 import board.member.dto.LoginDto;
 import board.member.dto.LoginResponseDto;
-import board.member.dto.MemberDto;
+import board.member.dto.MemberPostDto;
 import board.member.dto.MemberResponseDto;
 import board.member.entity.Member;
 import board.member.repository.MemberRepository;
@@ -34,7 +36,7 @@ public class MemberService {
     public LoginResponseDto login(LoginDto loginDto) {
         Member member = getExistingMember(loginDto.getEmail());
         if (!member.correctPassword(passwordEncoder, loginDto.getPassword())) {
-            throw new RuntimeException("password doesn't match");
+            throw new BusinessException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
         // generate jwt token
         String token = jwtUtils.createToken(member.getEmail());
@@ -44,14 +46,14 @@ public class MemberService {
     private Member getExistingMember(String email) {
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
         if (optionalMember.isEmpty()) {
-            throw new RuntimeException("email not exists");
+            throw new BusinessException(ExceptionCode.MEMBER_NOT_FOUND);
         }
         return optionalMember.get();
     }
 
     private void verifyNewEmail(String email) {
         if (memberRepository.findByEmail(email).isPresent()) {
-            throw new RuntimeException("email already exists");
+            throw new BusinessException(ExceptionCode.EMAIL_EXISTS);
         }
     }
 }
