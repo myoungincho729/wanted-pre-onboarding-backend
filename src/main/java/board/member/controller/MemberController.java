@@ -2,13 +2,12 @@ package board.member.controller;
 
 import board.member.dto.LoginDto;
 import board.member.dto.LoginResponseDto;
-import board.member.dto.MemberDto;
+import board.member.dto.MemberPostDto;
 import board.member.dto.MemberResponseDto;
 import board.member.service.MemberService;
 import board.response.Response;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +21,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping
-    public ResponseEntity join(@RequestBody @Valid MemberDto memberDto) {
+    public ResponseEntity join(@RequestBody @Valid MemberPostDto memberDto) {
         MemberResponseDto memberResponseDto = memberService.createMember(memberDto);
         Response response = Response.builder()
                 .data(memberResponseDto)
