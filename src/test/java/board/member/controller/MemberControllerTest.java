@@ -147,6 +147,27 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$.error").value("Password는 8자 이상이어야 합니다."));
     }
 
+    @DisplayName("로그인 - 정상동작")
+    @Test
+    void loginTest1() throws Exception {
+        //given
+        LoginDto loginDto = new LoginDto("m1@gmail.com", "12345678");
+        String content = gson.toJson(loginDto);
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                post("/user/login")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+        );
+
+        //then
+        actions
+                .andExpect(jsonPath("$.data.token").exists())
+                .andExpect(jsonPath("$.error").isEmpty());
+    }
+
     @DisplayName("로그인 - 비밀번호 다름 에러")
     @Test
     void loginTest2() throws Exception {
