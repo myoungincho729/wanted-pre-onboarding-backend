@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.1.2'
     id 'io.spring.dependency-management' version '1.1.2'
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'jacoco'
 }
 
 group = 'board'
@@ -11,6 +12,10 @@ version = '0.0.1-SNAPSHOT'
 java {
     sourceCompatibility = '17'
 }
+jacoco {
+    toolVersion = "0.8.7"
+}
+
 
 repositories {
     mavenCentral()
@@ -53,4 +58,11 @@ tasks.named('test') {
 tasks.named('asciidoctor') {
     inputs.dir snippetsDir
     dependsOn test
+}
+
+test {
+    finalizedBy jacocoTestReport // 테스트 종료후 항상 리포트 생성
+}
+jacocoTestReport {
+    dependsOn test // 리포트 생성을 위해서는 test가 먼저 완료되어야 함
 }
