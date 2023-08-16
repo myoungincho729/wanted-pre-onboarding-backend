@@ -8,6 +8,7 @@
 
 - git clone 후에 적절한 환경변수를 설정합니다. 이후 ```./gradle build -> java -jar ./build/libs/board-0.0.1-SNAPSHOT.jar```를 실행합니다.
   - ```환경변수 : AWS_RDS_ENDPOINT, AWS_RDS_USERNAME, AWS_RDS_PASSWORD, JWT_SECRET_KEY```
+  - 디비 없이 실행하려면 ```java -jar -Dspring.profiles.active=test ./build/libs/board-0.0.1-SNAPSHOT.jar```를 실행합니다.
 - [배포링크](http://ec2-43-201-66-128.ap-northeast-2.compute.amazonaws.com:8082)
 - [API문서](https://documenter.getpostman.com/view/22639502/2s9Xy6rVpe)
 
@@ -62,7 +63,8 @@
 }
 ```
 
-- 26개의 테스트를 작성하였으며, Jacoco 기준 93%의 테스트 커버리지를 달성했습니다.
+- 테스트 환경과 프로덕션 환경을 분리하였습니다.
+- 26개의 테스트를 작성하였으며, Jacoco 기준 93%의 테스트 커버리지를 달성했습니다. 테스트 환경은 H2 임베디드 데이터베이스를 사용합니다.
 - AWS EC2에서 배포하였으며, AWS RDS(MySQL 8.0.32)를 연동했습니다.
 
 ---
