@@ -6,8 +6,8 @@
 ---
 ### 애플리케이션 실행 방법 및 API 문서
 
-- git clone 후에 적절한 환경변수를 설정합니다.
-  - ```AWS_RDS_ENDPOINT, AWS_RDS_USERNAME, AWS_RDS_PASSWORD, JWT_SECRET_KEY```를 설정합니다.
+- git clone 후에 적절한 환경변수를 설정합니다. 이후 ```./gradle build -> java -jar ./build/libs/board-0.0.1-SNAPSHOT.jar```를 실행합니다.
+  - ```환경변수 : AWS_RDS_ENDPOINT, AWS_RDS_USERNAME, AWS_RDS_PASSWORD, JWT_SECRET_KEY```
 - [배포링크](http://ec2-43-201-66-128.ap-northeast-2.compute.amazonaws.com:8082)
 - [API문서](https://documenter.getpostman.com/view/22639502/2s9Xy6rVpe)
 
@@ -37,6 +37,7 @@
 
 ### 구현 방법 설명
 
+- ```JAVA 17, Spring Boot 3.1.2, Spring Data JPA```를 사용하여 구현하였습니다.
 - RestControllerAdvice를 활용하여 모든 예외처리를 하나의 클래스에서 하도록 구현했습니다.
 - 예외처리를 할 때에 ExceptionCode라는 enum안에 비즈니스 로직의 에러에 해당하는 값과 메세지를 정의하였습니다.
 - 모든 정상요청/예외의 응답 바디의 구조가 ```data/error```필드로 같도록 통일하였습니다.
