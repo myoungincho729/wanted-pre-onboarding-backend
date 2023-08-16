@@ -6,8 +6,20 @@
 ---
 ### 애플리케이션 실행 방법 및 API 문서
 
+- git clone 후에 적절한 환경변수를 설정합니다.
+  - ```AWS_RDS_ENDPOINT, AWS_RDS_USERNAME, AWS_RDS_PASSWORD, JWT_SECRET_KEY```를 설정합니다.
 - [배포링크](http://ec2-43-201-66-128.ap-northeast-2.compute.amazonaws.com:8082)
 - [API문서](https://documenter.getpostman.com/view/22639502/2s9Xy6rVpe)
+
+| NO. | Description   | Method | Path                   | Authorization | Request Parameters      |
+| :-: | ------------- | ------ | ---------------------- | :-----------: | ----------------------- |
+| 1   | 사용자 회원가입   | POST   | /user                  | X              | `body`  { email, password } |
+| 2   | 사용자 로그인     | POST   | /user/login             | X             | `body`  { email, password } |
+| 3   | 새로운 게시글 생성 | POST   | /article/create          | O             | `body`  { title, content } |
+| 4   | 게시글 전체 조회  | GET    | /article/list             | X             | `query` <br>page(default = 1)<br>size(default = 5) |
+| 5   | 특정 게시글 조회  | GET    | /article/{article_id}     | X             |                         |
+| 6   | 특정 게시글 수정  | PUT    | /article/{article_id}     | O             | `body`  { title, content } |
+| 7   | 특정 게시글 삭제  | DELETE | /article/{article_id}     | O             |                         |
 
 ---
 
@@ -19,15 +31,41 @@
 
 ### 데모 영상 링크
 
+- [유튜브 데모 영상](https://www.youtube.com/watch?v=FZ0MmPx4-oQ)
+
 ---
 
 ### 구현 방법 설명
 
 - RestControllerAdvice를 활용하여 모든 예외처리를 하나의 클래스에서 하도록 구현했습니다.
 - 예외처리를 할 때에 ExceptionCode라는 enum안에 비즈니스 로직의 에러에 해당하는 값과 메세지를 정의하였습니다.
-- 모든 정상요청/예외의 응답 바디의 구조가 data/error필드로 같도록 통일하였습니다. 
-- 테스트코드를 작성하였으며, Jacoco 기준 93%의 테스트 커버리지를 달성했습니다.
-  
+- 모든 정상요청/예외의 응답 바디의 구조가 ```data/error```필드로 같도록 통일하였습니다.
+
+- 정상요청 예시 
+```js
+{
+    "error": null,
+    "data": {
+        "id": 6,
+        "title": "asdf66",
+        "content": "asdf166",
+        "writerEmail": "myoungin2@naver.com"
+    }
+}
+```
+- 에러 예시 
+```js
+{
+    "error": "Login needed",
+    "data": null
+}
+```
+
+- 26개의 테스트를 작성하였으며, Jacoco 기준 93%의 테스트 커버리지를 달성했습니다.
+- AWS EC2에서 배포하였으며, AWS RDS(MySQL 8.0.32)를 연동했습니다.
+
+---
+
 - **과제 1. 사용자 회원가입 엔드포인트**
     - 유효성 검증을 위해 커스텀 어노테이션을 정의했습니다.(@EmailConstraint, @PasswordContraint)
 - **과제 2. 사용자 로그인 엔드포인트**
