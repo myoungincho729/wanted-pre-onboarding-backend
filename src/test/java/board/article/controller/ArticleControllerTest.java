@@ -2,6 +2,7 @@ package board.article.controller;
 
 import board.article.dto.ArticlePostDto;
 import board.article.dto.ArticleResponseDto;
+import board.article.dto.ArticleUpdateDto;
 import board.article.service.ArticleService;
 import board.jwt.JwtUtils;
 import board.member.controller.MemberController;
@@ -208,9 +209,9 @@ class ArticleControllerTest {
 
         String newTitle = "new article";
         String newContent = "new hello spring";
-        ArticlePostDto newArticlePostDto = new ArticlePostDto(newTitle, newContent);
+        ArticleUpdateDto newArticleUpdateDto = new ArticleUpdateDto(newTitle, newContent);
         Long articleId = responseDto.getId();
-        String articleContent = gson.toJson(newArticlePostDto);
+        String articleContent = gson.toJson(newArticleUpdateDto);
 
         //when
         ResultActions actions =
@@ -224,8 +225,8 @@ class ArticleControllerTest {
 
         //then
         actions
-                .andExpect(jsonPath("$.data.title").value(newArticlePostDto.getTitle()))
-                .andExpect(jsonPath("$.data.content").value(newArticlePostDto.getContent()))
+                .andExpect(jsonPath("$.data.title").value(newArticleUpdateDto.getTitle()))
+                .andExpect(jsonPath("$.data.content").value(newArticleUpdateDto.getContent()))
                 .andExpect(jsonPath("$.data.writerEmail").value(email));
     }
 
@@ -240,9 +241,9 @@ class ArticleControllerTest {
 
         String newTitle = "new article";
         String newContent = "new hello spring";
-        ArticlePostDto newArticlePostDto = new ArticlePostDto(newTitle, newContent);
+        ArticleUpdateDto newArticleUpdateDto = new ArticleUpdateDto(newTitle, newContent);
         Long articleId = responseDto.getId();
-        String articleContent = gson.toJson(newArticlePostDto);
+        String articleContent = gson.toJson(newArticleUpdateDto);
 
         //when
         ResultActions actions =
@@ -271,9 +272,9 @@ class ArticleControllerTest {
 
         String newTitle = "new article";
         String newContent = "new hello spring";
-        ArticlePostDto newArticlePostDto = new ArticlePostDto(newTitle, newContent);
+        ArticleUpdateDto newArticleUpdateDto = new ArticleUpdateDto(newTitle, newContent);
         Long articleId = responseDto.getId() + 1;
-        String articleContent = gson.toJson(newArticlePostDto);
+        String articleContent = gson.toJson(newArticleUpdateDto);
 
         //when
         ResultActions actions =
@@ -388,5 +389,30 @@ class ArticleControllerTest {
         actions
                 .andExpect(jsonPath("$.data").isEmpty())
                 .andExpect(jsonPath("$.error").value("Article not found"));
+    }
+
+    @DisplayName("게시글 목록 - 정상동작")
+    @Test
+    void getArticlesTest1() throws Exception {
+        //given
+        for (int index=0; index<10; index++) {
+            ArticlePostDto articlePostDto = new ArticlePostDto("title" + index, "content" + index);
+            articleService.createArticle(email, articlePostDto);
+        }
+
+        //when
+        ResultActions actions =
+                mockMvc.perform(
+                        get("/article/list")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                );
+
+        //then
+        actions
+                .andExpect(jsonPath("$.data.pageInfo.page").value(1))
+                .andExpect(jsonPath("$.data.pageInfo.size").value(5))
+                .andExpect(jsonPath("$.data.pageInfo.totalElements").value(10))
+                .andExpect(jsonPath("$.data.pageInfo.totalPages").value(2));
     }
 }
