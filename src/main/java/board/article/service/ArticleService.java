@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -88,7 +89,7 @@ public class ArticleService {
         PageInfo pageInfo = PageInfo.from(page, size, articles.getTotalElements(), articles.getTotalPages());
         return PageResponseDto.builder()
                 .pageInfo(pageInfo)
-                .list(Collections.singletonList(articleResponseDtos))
+                .list(Arrays.asList(articleResponseDtos.toArray()))
                 .build();
     }
 }
