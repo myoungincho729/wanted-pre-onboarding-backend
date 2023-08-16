@@ -8,6 +8,7 @@ import board.article.service.ArticleService;
 import board.interceptor.JwtInterceptor;
 import board.response.Response;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,8 +49,8 @@ public class ArticleController {
 
     @GetMapping("/list")
     public ResponseEntity getArticles(
-           @RequestParam(defaultValue = "1") int page,
-           @RequestParam(defaultValue = "5") int size
+           @RequestParam(defaultValue = "1") @Min(message = "0이상의 수만 가능합니다.", value = 0) int page,
+           @RequestParam(defaultValue = "5") @Min(message = "0이상의 수만 가능합니다.", value = 0) int size
     ) {
         PageResponseDto pageResponseDto = articleService.getArticles(page, size);
         return ResponseEntity.ok().body(
