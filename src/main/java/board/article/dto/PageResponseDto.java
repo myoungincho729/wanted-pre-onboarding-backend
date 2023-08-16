@@ -7,7 +7,6 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter
-@Setter
 public class PageResponseDto<T> {
     private List<T> list;
     private PageInfo pageInfo;

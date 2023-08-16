@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import java.beans.BeanProperty;
 
 @Getter
-@Setter
 public class PageInfo {
     private int page;
     private int size;
